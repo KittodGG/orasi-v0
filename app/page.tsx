@@ -2,19 +2,21 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 
-// Candidate data
-const candidates = [
+// Candidate data - export it so it can be imported in dashboard
+export const candidates = [
   {
     id: 1,
     name: "Rizki",
     position: "Calon Koordinator Jurusan",
     visi: "Mendorong siswa/i RPL berkarakter baik, aktif, inspiratif, serta memiliki kemampuan berpikir kritis, kreatif, inovatif, berintegritas, berjiwa kepemimpinan, dan tetap menjaga keharmonisan dalam berinteraksi sosial.",
     pengalaman: [
-      "Published 15+ research papers", 
-      "Secured 3 major grants", 
-      "Mentored 20+ graduate students"
+      "Panitia Open House RPL SMKN 1 Cimahi (2025)", 
+      "Panitia Open House SMK Negeri 1 Cimahi (2025)", 
+      "Anggota MPK SMK Negeri 1 Cimahi (2025 - Sekarang)",
+      "ketua Pelaksana SE-League(2025)"
     ],
     quotes: "“Unity to be real must stand the severest strain without breaking.” -Mahatma Gandhi",
   },
@@ -24,9 +26,10 @@ const candidates = [
     position: "Calon Koordinator Jurusan",
     visi: "Menjadikan jurusan Rekayasa Perangkat Lunak sebagai jurusan yang aktif, produktif, kreatif, inovatif dan beretika dengan ilmu teknologi informasi serta berlandaskan ilmu agama yang kuat. Berani berpendapat dan memiliki rasa kekeluargaan.",
     pengalaman: [
-      "Led 4 industry collaboration projects",
-      "Developed 2 patented technologies",
-      "Organized international conference",
+      "Anggota MPK SMPN 47 Bandung (2021 - 2022)",
+      "Wakil Ketua Pecinta Lingkungan SMPN 47 Bandung (2022 - 2023)",
+      "Ketua Pelaksana Bukber FORPEC (2025)",
+      "Ketua Pelaksana Open House RPL (2025)"
     ],
     quotes: "“Perubahan tidak akan datang jika kita menunggu orang lain atau waktu lain. Kita adalah orang-orang yang kita tunggu-tunggu. Kita adalah perubahan yang kita cari.” -Barrack Obama",
   },
@@ -34,39 +37,41 @@ const candidates = [
     id: 3,
     name: "Adhya",
     position: "Calon Wakil Koordinator Jurusan",
-    visi: "Innovative educator with a passion for technology integration in learning. Advocate for inclusive education.",
+    visi: "Mewujudkan jurusan Rekayasa Perangkat Lunak (RPL) yang unggul dalam prestasi, aktif dalam kegiatan, serta solid dalam kerja sama, dengan mengedepankan semangat kekeluargaan, inovasi, dan profesionalisme.",
     pengalaman: [
-      "Pioneered digital learning platform",
-      "Received teaching excellence award",
-      "Led curriculum redesign initiative",
+      "Panitia Divisi Acara Pentas Seni SMP Negeri 1 Cimahi “ESTHALAMOR” (2023)",
+      "Bendahara Ekskul KIR Matematika SMP Negeri 1 Cimahi (2023-2024)",
+      "Panitia Divisi Acara Open House RPL (2025)"
     ],
-    quotes: "To create an inclusive learning environment that embraces technological innovation.",
+    quotes: "“Kita sering terlalu sibuk mengejar kesempurnaan, sampai lupa bahwa saling menguatkan adalah hal yang jauh lebih bermakna.” -Anonymous 2025",
   },
   {
     id: 4,
     name: "Hafiz",
     position: "Calon Wakil Koordinator Jurusan",
-    visi: "Research-focused academic with international experience. Committed to fostering collaborative research environments.",
+    visi: "Menjadikan jurusan Rekayasa Perangkat Lunak yang beretika, aktif, dan berlandaskan nilai-nilai agama, serta membentuk siswa-siswi yang cerdas, bertanggung jawab, dan menjunjung tinggi kebersamaan.",
     pengalaman: [
-      "Published in top-tier journals",
-      "Established international research network",
-      "Secured significant research funding",
+      "Ketua Basket SMP Negeri 2 Ngamprah tahun 2024-2025",
+      "Panitia Buka Bersama tahfidz qur’an 2021 - 2022/2022 - 2023",
+      "Anggota MPK Smpn 2 Ngamprah (2022-2023)",
+      "Panitia Open House 2025"
     ],
     quotes:
-      "To elevate our department's research profile on the global stage while nurturing the next generation of innovators.",
+      "“Tujuan utama dari pembelajaran adalah menguasai hal baru. Yang perlu diperhatikan adalah bagaimana menemukan strategi belajar yang tepat. Ketika proses belajar terasa tidak lancar, itu bukan karena seseorang kurang cerdas, melainkan karena strategi yang sesuai belum ditemukan.” -Carol S. Dweck, ph.D.",
   },
   {
     id: 5,
     name: "Raihan",
     position: "Calon Wakil Koordinator Jurusan",
-    visi: "Technology entrepreneur turned educator. Brings practical industry insights and entrepreneurial mindset to academia.",
+    visi: "Meningkatkan serta mengembangkan ruang lingkup RPL sebagai ruang belajar dan sosial yang semakin teratur, terintegrasi, produktif tanpa meninggalkan aspek keagamaan serta keharmonisan antar sesama demi terciptanya anggota jurusan yang inovatif, produktif dan juga kreatif.",
     pengalaman: [
-      "Founded two successful tech startups",
-      "Developed industry-academia partnership program",
-      "Mentored student entrepreneurs",
+      "Anggota Osis SMPN 2 Batujajar Sekbid 1 : 2021 - 2022",
+      "Ketua Osis SMPN 2 Batujajar 2022 - 2023",
+      "Duta Genre Putra SMKN 1 Cimahi 2024 - 2025",
+      "Koordinator Angkatan 51 PIK - R SMKN 1 Cimahi 2024 - Sekarang"
     ],
     quotes:
-      "To create an entrepreneurial ecosystem that prepares students for the rapidly evolving technological landscape.",
+      "“Hatiku tenang karena mengetahui bahwa apa yang melewatkanku tidak akan pernah menjadi takdirku, dan apa yang ditakdirkan untukku tidak akan pernah melewatkanku” -Umar bin Khattab",
   },
 ]
 
@@ -78,6 +83,8 @@ export default function Home() {
   const [cardPositions, setCardPositions] = useState<Array<{ top: string; left: string; rotate: string }>>([])
   const [selectedWakojur, setSelectedWakojur] = useState<string | null>(null)
   const [selectedCawakojur, setSelectedCawakojur] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [voteSuccess, setVoteSuccess] = useState(false)
 
   // Generate fixed positions for cards without overlap
   useEffect(() => {
@@ -140,15 +147,43 @@ export default function Home() {
     }
   }
 
-  const handleVoteSubmit = () => {
+  const handleVoteSubmit = async () => {
     if (selectedWakojur && selectedCawakojur) {
-      alert(`Terima kasih! Anda telah memilih ${selectedWakojur} sebagai Wakojur dan ${selectedCawakojur} sebagai Cawakojur.`)
-      setIsVotingOpen(false)
-      setSelectedWakojur(null)
-      setSelectedCawakojur(null)
-      setVotingStep('wakojur')
+      setIsSubmitting(true)
+      
+      try {
+        // Find the candidate IDs based on names
+        const wakojurCandidate = candidates.find(c => c.name === selectedWakojur);
+        const cawakojurCandidate = candidates.find(c => c.name === selectedCawakojur);
+        
+        if (wakojurCandidate && cawakojurCandidate) {
+          // Store votes in localStorage for simplicity
+          // In a real app, this would be an API call to a database
+          const votes = JSON.parse(localStorage.getItem('votes') || '{}');
+          
+          // Increment votes for wakojur
+          votes[`wakojur_${wakojurCandidate.id}`] = (votes[`wakojur_${wakojurCandidate.id}`] || 0) + 1;
+          
+          // Increment votes for cawakojur
+          votes[`cawakojur_${cawakojurCandidate.id}`] = (votes[`cawakojur_${cawakojurCandidate.id}`] || 0) + 1;
+          
+          // Save back to localStorage
+          localStorage.setItem('votes', JSON.stringify(votes));
+          
+          alert(`Terima kasih! Anda telah memilih ${selectedWakojur} sebagai Wakojur dan ${selectedCawakojur} sebagai Cawakojur.`);
+          setIsVotingOpen(false);
+          setSelectedWakojur(null);
+          setSelectedCawakojur(null);
+          setVotingStep('wakojur');
+        }
+      } catch (error) {
+        console.error('Error submitting votes:', error);
+        alert('Terjadi kesalahan saat mengirim suara. Silakan coba lagi.');
+      } finally {
+        setIsSubmitting(false);
+      }
     } else {
-      alert("Silakan pilih satu kandidat untuk posisi Wakil Koordinator Jurusan.")
+      alert("Silakan pilih satu kandidat untuk posisi Wakil Koordinator Jurusan.");
     }
   }
 
@@ -210,6 +245,18 @@ export default function Home() {
             >
               !!! VOTE HERE !!!
             </button>
+          </div>
+          
+          {/* Dashboard link */}
+          <div
+            className="absolute bottom-10 right-10 z-50"
+          >
+            <Link 
+              href="/dashboard"
+              className="bg-[#5d4037] text-white px-4 py-2 rounded-md shadow-lg hover:bg-[#4e342e] transition-colors"
+            >
+              View Results
+            </Link>
           </div>
         </div>
       </div>
