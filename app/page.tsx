@@ -8,60 +8,64 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 const candidates = [
   {
     id: 1,
-    name: "Rahmat",
-    position: "Department Chair Candidate",
-    bio: "Experienced leader with 5+ years in academic administration. Focused on curriculum innovation and student success.",
-    achievements: ["Published 15+ research papers", "Secured 3 major grants", "Mentored 20+ graduate students"],
-    vision: "To transform our department into a leading center for innovation and research excellence.",
+    name: "Rizki",
+    position: "Calon Koordinator Jurusan",
+    visi: "Mendorong siswa/i RPL berkarakter baik, aktif, inspiratif, serta memiliki kemampuan berpikir kritis, kreatif, inovatif, berintegritas, berjiwa kepemimpinan, dan tetap menjaga keharmonisan dalam berinteraksi sosial.",
+    pengalaman: [
+      "Published 15+ research papers", 
+      "Secured 3 major grants", 
+      "Mentored 20+ graduate students"
+    ],
+    quotes: "“Unity to be real must stand the severest strain without breaking.” -Mahatma Gandhi",
   },
   {
     id: 2,
-    name: "Mufida",
-    position: "Department Chair Candidate",
-    bio: "Strategic thinker with strong industry connections. Dedicated to bridging academic theory with practical applications.",
-    achievements: [
+    name: "Rafi",
+    position: "Calon Koordinator Jurusan",
+    visi: "Menjadikan jurusan Rekayasa Perangkat Lunak sebagai jurusan yang aktif, produktif, kreatif, inovatif dan beretika dengan ilmu teknologi informasi serta berlandaskan ilmu agama yang kuat. Berani berpendapat dan memiliki rasa kekeluargaan.",
+    pengalaman: [
       "Led 4 industry collaboration projects",
       "Developed 2 patented technologies",
       "Organized international conference",
     ],
-    vision: "To strengthen industry partnerships and prepare students for real-world challenges.",
+    quotes: "“Perubahan tidak akan datang jika kita menunggu orang lain atau waktu lain. Kita adalah orang-orang yang kita tunggu-tunggu. Kita adalah perubahan yang kita cari.” -Barrack Obama",
   },
   {
     id: 3,
-    name: "Ilham",
-    position: "Department Chair Candidate",
-    bio: "Innovative educator with a passion for technology integration in learning. Advocate for inclusive education.",
-    achievements: [
+    name: "Adhya",
+    position: "Calon Wakil Koordinator Jurusan",
+    visi: "Innovative educator with a passion for technology integration in learning. Advocate for inclusive education.",
+    pengalaman: [
       "Pioneered digital learning platform",
       "Received teaching excellence award",
       "Led curriculum redesign initiative",
     ],
-    vision: "To create an inclusive learning environment that embraces technological innovation.",
+    quotes: "To create an inclusive learning environment that embraces technological innovation.",
   },
   {
     id: 4,
-    name: "Anisa",
-    position: "Department Chair Candidate",
-    bio: "Research-focused academic with international experience. Committed to fostering collaborative research environments.",
-    achievements: [
+    name: "Hafiz",
+    position: "Calon Wakil Koordinator Jurusan",
+    visi: "Research-focused academic with international experience. Committed to fostering collaborative research environments.",
+    pengalaman: [
       "Published in top-tier journals",
       "Established international research network",
       "Secured significant research funding",
     ],
-    vision:
+    quotes:
       "To elevate our department's research profile on the global stage while nurturing the next generation of innovators.",
   },
   {
     id: 5,
-    name: "Budi",
-    position: "Department Chair Candidate",
-    bio: "Technology entrepreneur turned educator. Brings practical industry insights and entrepreneurial mindset to academia.",
-    achievements: [
+    name: "Raihan",
+    position: "Calon Wakil Koordinator Jurusan",
+    visi: "Technology entrepreneur turned educator. Brings practical industry insights and entrepreneurial mindset to academia.",
+    pengalaman: [
       "Founded two successful tech startups",
       "Developed industry-academia partnership program",
       "Mentored student entrepreneurs",
     ],
-    vision:
+    quotes:
       "To create an entrepreneurial ecosystem that prepares students for the rapidly evolving technological landscape.",
   },
 ]
@@ -69,22 +73,83 @@ const candidates = [
 export default function Home() {
   const [selectedCandidate, setSelectedCandidate] = useState<(typeof candidates)[0] | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isVotingOpen, setIsVotingOpen] = useState(false)
+  const [votingStep, setVotingStep] = useState<'wakojur' | 'cawakojur'>('wakojur')
   const [cardPositions, setCardPositions] = useState<Array<{ top: string; left: string; rotate: string }>>([])
+  const [selectedWakojur, setSelectedWakojur] = useState<string | null>(null)
+  const [selectedCawakojur, setSelectedCawakojur] = useState<string | null>(null)
 
-  // Generate random positions for cards
+  // Generate fixed positions for cards without overlap
   useEffect(() => {
-    const positions = candidates.map(() => {
-      const top = `${Math.random() * 60 + 15}%` // Between 15% and 75% from top
-      const left = `${Math.random() * 70 + 10}%` // Between 10% and 80% from left
-      const rotate = `${Math.random() * 20 - 10}deg` // Between -10 and 10 degrees
-      return { top, left, rotate }
-    })
-    setCardPositions(positions)
-  }, [])
+    // Define fixed positions for each card
+    const positions = candidates.map((candidate) => {
+      let top, left, rotate;
+      
+      // Left side (IDs 3-5)
+      if (candidate.id >= 3) {
+        // Calculate vertical spacing for left side cards
+        const verticalPosition = (candidate.id - 3) * 30 + 20; // 20%, 50%, 80% from top
+        top = `${verticalPosition}%`;
+        left = `${Math.random() * 10 + 10}%`; // 10-20% from left (moved further left)
+        
+        // Alternate rotation for left side cards
+        if (candidate.id === 3) {
+          rotate = `${Math.random() * 5 + 3}deg`; // Slight right tilt (3 to 8 degrees)
+        } else if (candidate.id === 4) {
+          rotate = `-${Math.random() * 5 + 3}deg`; // Slight left tilt (-3 to -8 degrees)
+        } else {
+          rotate = `${Math.random() * 2 - 1}deg`; // Almost straight (-1 to 1 degrees)
+        }
+      } 
+      // Right side (IDs 1-2)
+      else {
+        // Calculate vertical spacing for right side cards
+        const verticalPosition = (candidate.id - 1) * 40 + 30; // 30%, 70% from top
+        top = `${verticalPosition}%`;
+        left = `${Math.random() * 10 + 75}%`; // 75-85% from left (moved further right)
+        
+        // Alternate rotation for right side cards
+        if (candidate.id === 1) {
+          rotate = `-${Math.random() * 5 + 3}deg`; // Slight left tilt (-3 to -8 degrees)
+        } else {
+          rotate = `${Math.random() * 5 + 3}deg`; // Slight right tilt (3 to 8 degrees)
+        }
+      }
+      
+      return { top, left, rotate };
+    });
+    
+    setCardPositions(positions);
+  }, []);
 
   const handleCardClick = (candidate: (typeof candidates)[0]) => {
     setSelectedCandidate(candidate)
     setIsDialogOpen(true)
+  }
+
+  const handleVoteClick = () => {
+    setIsVotingOpen(true)
+    setVotingStep('wakojur')
+  }
+
+  const handleContinue = () => {
+    if (selectedWakojur) {
+      setVotingStep('cawakojur')
+    } else {
+      alert("Silakan pilih satu kandidat untuk posisi Koordinator Jurusan.")
+    }
+  }
+
+  const handleVoteSubmit = () => {
+    if (selectedWakojur && selectedCawakojur) {
+      alert(`Terima kasih! Anda telah memilih ${selectedWakojur} sebagai Wakojur dan ${selectedCawakojur} sebagai Cawakojur.`)
+      setIsVotingOpen(false)
+      setSelectedWakojur(null)
+      setSelectedCawakojur(null)
+      setVotingStep('wakojur')
+    } else {
+      alert("Silakan pilih satu kandidat untuk posisi Wakil Koordinator Jurusan.")
+    }
   }
 
   return (
@@ -92,7 +157,7 @@ export default function Home() {
       {/* Background image */}
       <div className="fixed inset-0 z-0">
         <Image
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Orasi%20User%20%28No%20Navbar%29-2u0fK8dqTyIrmzqfwUmYmSLtCozG4k.png"
+          src="/BgOrasi.jpg"
           alt="Detective desk background"
           fill
           className="object-cover"
@@ -112,19 +177,19 @@ export default function Home() {
                 top: cardPositions[index]?.top || "50%",
                 left: cardPositions[index]?.left || "50%",
                 transform: `translate(-50%, -50%) rotate(${cardPositions[index]?.rotate || "0deg"})`,
-                width: "160px", // Smaller card width
+                width: "130px", // Reduced from 160px to 140px for smaller card width
                 zIndex: 10 + index,
               }}
               onClick={() => handleCardClick(candidate)}
             >
-              <div className="relative w-full shadow-lg" style={{ aspectRatio: "9/16" }}>
+              <div className="relative w-full shadow-lg transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.5)]" style={{ aspectRatio: "2.5/3.5" }}>
                 <Image
-                  src={`/placeholder.svg?height=360&width=202&text=${candidate.name}`}
+                  src={`/${candidate.name}.png`}
                   alt={candidate.name}
                   fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="object-cover transition-transform duration-300 group-hover:scale-110 brightness-75 opacity-90 group-hover:brightness-100 group-hover:opacity-100"
                 />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300"></div>
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-300"></div>
 
                 {/* Name tag */}
                 <div className="absolute bottom-0 left-0 right-0 bg-[#5d4037]/80 p-2 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
@@ -134,6 +199,18 @@ export default function Home() {
               </div>
             </div>
           ))}
+          
+          {/* Bottom center button with rotation */}
+          <div
+            className="absolute bottom-28 left-[55%] transform -translate-x-1/2 rotate-[-4deg] z-50 cursor-pointer"
+            onClick={handleVoteClick}
+          >
+            <button 
+              className="bg-[transparent] text-lg text-[#691709] px-6 py-3 rounded-xl shadow-lg border-2 border-[#7f1b0e] hover:bg-[transparent] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,255,255,0.6)] hover:rotate-2 hover:scale-105 font-bold"
+            >
+              !!! VOTE HERE !!!
+            </button>
+          </div>
         </div>
       </div>
 
@@ -154,7 +231,7 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                 <div className="col-span-1 relative h-48 md:h-full">
                   <Image
-                    src={`/placeholder.svg?height=360&width=202&text=${selectedCandidate.name}`}
+                    src={`/${selectedCandidate.name}.png`}
                     alt={selectedCandidate.name}
                     fill
                     className="object-cover border-2 border-[#5d4037]"
@@ -163,27 +240,27 @@ export default function Home() {
 
                 <div className="col-span-2 space-y-4">
                   <div>
-                    <h3 className="text-[#5d4037] font-bold">Position</h3>
+                    <h3 className="text-[#5d4037] font-bold">Posisi</h3>
                     <p className="text-[#5d4037]/80">{selectedCandidate.position}</p>
                   </div>
 
                   <div>
-                    <h3 className="text-[#5d4037] font-bold">Biography</h3>
-                    <p className="text-[#5d4037]/80">{selectedCandidate.bio}</p>
+                    <h3 className="text-[#5d4037] font-bold">Visi</h3>
+                    <p className="text-[#5d4037]/80">{selectedCandidate.visi}</p>
                   </div>
 
                   <div>
-                    <h3 className="text-[#5d4037] font-bold">Key Achievements</h3>
+                    <h3 className="text-[#5d4037] font-bold">Pengalaman</h3>
                     <ul className="list-disc pl-5 text-[#5d4037]/80">
-                      {selectedCandidate.achievements.map((achievement, index) => (
+                      {selectedCandidate.pengalaman.map((achievement, index) => (
                         <li key={index}>{achievement}</li>
                       ))}
                     </ul>
                   </div>
 
                   <div>
-                    <h3 className="text-[#5d4037] font-bold">Vision Statement</h3>
-                    <p className="text-[#5d4037]/80 italic">"{selectedCandidate.vision}"</p>
+                    <h3 className="text-[#5d4037] font-bold">Quotes</h3>
+                    <p className="text-[#5d4037]/80 italic">"{selectedCandidate.quotes}"</p>
                   </div>
                 </div>
               </div>
@@ -198,6 +275,137 @@ export default function Home() {
               </div>
             </>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Voting dialog */}
+      <Dialog open={isVotingOpen} onOpenChange={setIsVotingOpen}>
+        <DialogContent className="max-w-4xl bg-[#f5f5dc] border-[#5d4037]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl text-[#5d4037] flex items-center gap-2">
+              <span>Voting Ballot</span>
+            </DialogTitle>
+            <DialogDescription className="text-[#5d4037]/80">
+              {votingStep === 'wakojur' 
+                ? 'Pilih satu kandidat untuk posisi Koordinator Jurusan' 
+                : 'Pilih satu kandidat untuk posisi Wakil Koordinator Jurusan'}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-8 my-4">
+            {/* Wakojur Selection */}
+            {votingStep === 'wakojur' && (
+              <div>
+                <h3 className="text-xl font-bold text-[#5d4037] mb-4">Pemilihan Koordinator Jurusan</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {["Rizki", "Rafi"].map((name) => (
+                    <div 
+                      key={name} 
+                      className={`relative cursor-pointer transition-all duration-300 ${
+                        selectedWakojur === name ? "ring-4 ring-[#5d4037] scale-105" : "hover:scale-105"
+                      }`}
+                      onClick={() => setSelectedWakojur(name)}
+                    >
+                      <div className="relative aspect-[3/4] w-full h-96">
+                        <Image
+                          src={`/${name}PC.png`}
+                          alt={name}
+                          fill
+                          className="object-cover rounded-md"
+                        />
+                        <div className={`absolute inset-0 bg-black/10 rounded-md ${
+                          selectedWakojur === name ? "bg-transparent" : ""
+                        }`}></div>
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 bg-[#5d4037]/80 p-2 rounded-b-md">
+                        <p className="text-white font-bold text-center">{name}</p>
+                        <p className="text-gray-200 text-sm text-center">Calon Koordinator Jurusan</p>
+                      </div>
+                      {selectedWakojur === name && (
+                        <div className="absolute top-2 right-2 bg-[#5d4037] text-white rounded-full p-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Cawakojur Selection */}
+            {votingStep === 'cawakojur' && (
+              <div>
+                <h3 className="text-xl font-bold text-[#5d4037] mb-4">Pemilihan Wakil Koordinator Jurusan</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {["Adhya", "Hafiz", "Raihan"].map((name) => (
+                    <div 
+                      key={name} 
+                      className={`relative cursor-pointer transition-all duration-300 ${
+                        selectedCawakojur === name ? "ring-4 ring-[#5d4037] scale-105" : "hover:scale-105"
+                      }`}
+                      onClick={() => setSelectedCawakojur(name)}
+                    >
+                      <div className="relative aspect-[3/4] w-full">
+                        <Image
+                          src={`/${name}PC.png`}
+                          alt={name}
+                          fill
+                          className="object-cover rounded-md"
+                        />
+                        <div className={`absolute inset-0 bg-black/10 rounded-md ${
+                          selectedCawakojur === name ? "bg-transparent" : ""
+                        }`}></div>
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 bg-[#5d4037]/80 p-2 rounded-b-md">
+                        <p className="text-white font-bold text-center">{name}</p>
+                        <p className="text-gray-200 text-sm text-center">Calon Wakil Koordinator Jurusan</p>
+                      </div>
+                      {selectedCawakojur === name && (
+                        <div className="absolute top-2 right-2 bg-[#5d4037] text-white rounded-full p-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="mt-6 flex justify-end gap-4">
+            <button
+              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
+              onClick={() => {
+                if (votingStep === 'cawakojur') {
+                  setVotingStep('wakojur')
+                } else {
+                  setIsVotingOpen(false)
+                }
+              }}
+            >
+              {votingStep === 'cawakojur' ? 'Back' : 'Cancel'}
+            </button>
+            
+            {votingStep === 'wakojur' ? (
+              <button
+                className="bg-[#5d4037] text-white px-6 py-2 rounded hover:bg-[#4e342e] transition-colors"
+                onClick={handleContinue}
+              >
+                Continue
+              </button>
+            ) : (
+              <button
+                className="bg-[#5d4037] text-white px-6 py-2 rounded hover:bg-[#4e342e] transition-colors"
+                onClick={handleVoteSubmit}
+              >
+                Submit Vote
+              </button>
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </main>
